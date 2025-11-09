@@ -4,20 +4,11 @@ import {
   BarChart3, Database, Info 
 } from 'lucide-react'
 import axios from 'axios'
+import StatisticsPanel from './StatisticsPanel'
 
 const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
-  const [stats, setStats] = useState(null)
-  const [showStats, setShowStats] = useState(false)
+  const [showStatsPanel, setShowStatsPanel] = useState(false)
 
-  const loadStats = async () => {
-    try {
-      const response = await axios.get('/api/stats')
-      setStats(response.data)
-      setShowStats(true)
-    } catch (error) {
-      console.error('Error loading stats:', error)
-    }
-  }
 
   const clearConversation = async () => {
     if (window.confirm('Clear conversation history?')) {
@@ -77,7 +68,7 @@ const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
             </button>
 
             <button
-              onClick={loadStats}
+              onClick={() => setShowStatsPanel(true)}
               className="w-full flex items-center space-x-3 px-5 py-4 rounded-2xl hover:bg-neutral-100 transition-all duration-200 group"
             >
               <div className="w-9 h-9 bg-neutral-100 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:shadow-soft transition-all">
@@ -97,27 +88,6 @@ const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
             </button>
           </nav>
 
-          {/* Stats Display */}
-          {showStats && stats && (
-            <div className="mb-6 p-5 bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl border border-neutral-200 shadow-soft animate-slide-in">
-              <h3 className="text-sm font-bold text-neutral-800 mb-4 flex items-center">
-                <div className="w-7 h-7 bg-primary-100 rounded-lg flex items-center justify-center mr-2">
-                  <Database className="w-4 h-4 text-primary-600" />
-                </div>
-                Database Stats
-              </h3>
-              <div className="space-y-3 text-xs">
-                {Object.entries(stats.tables || {}).map(([table, count]) => (
-                  <div key={table} className="flex justify-between items-center py-2 px-3 bg-white rounded-xl hover:shadow-soft transition-shadow">
-                    <span className="text-neutral-600 font-medium capitalize">{table.replace('_', ' ')}</span>
-                    <span className="font-bold text-primary-600 bg-primary-50 px-3 py-1 rounded-lg">
-                      {count.toLocaleString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Footer */}
           <div className="py-6 border-t border-neutral-200">
@@ -130,6 +100,12 @@ const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
           </div>
         </div>
       </div>
+
+      {/* Statistics Panel */}
+      <StatisticsPanel 
+        isOpen={showStatsPanel} 
+        onClose={() => setShowStatsPanel(false)} 
+      />
 
       {/* Overlay */}
       {isOpen && (

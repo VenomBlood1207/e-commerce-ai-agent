@@ -242,7 +242,8 @@ async def get_stats():
         for table in tables:
             query = f"SELECT COUNT(*) as count FROM {table}"
             result = db_manager.execute_query(query)
-            table_stats[table] = result['count'].iloc[0]
+            # Convert numpy int64 to Python int for JSON serialization
+            table_stats[table] = int(result['count'].iloc[0])
         
         return {
             "tables": table_stats,

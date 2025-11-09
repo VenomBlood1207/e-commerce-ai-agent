@@ -78,7 +78,7 @@ An advanced GenAI-powered agentic system for conversational analytics on Brazili
 
 1. **Clone Repository**
 ```bash
-git clone <repository-url>
+git clone git@github.com:VenomBlood1207/e-commerce-ai-agent.git
 cd Maerskv2
 ```
 

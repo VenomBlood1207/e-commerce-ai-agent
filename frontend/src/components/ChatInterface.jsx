@@ -178,7 +178,7 @@ const ChatInterface = ({ sessionId }) => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask me anything about your e-commerce data..."
+                placeholder="Ask me anything about the data, or enter an SQL query..."
                 disabled={isLoading}
                 className="w-full px-6 py-4 pr-12 bg-white border-2 border-neutral-200 rounded-2xl focus:outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-100 disabled:bg-neutral-100 disabled:text-neutral-400 transition-all duration-200 text-neutral-800 placeholder-neutral-400 shadow-inner-soft"
               />

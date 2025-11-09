@@ -89,6 +89,15 @@ CRITICAL RULES:
 3. Use LIKE with wildcards for flexible category matching
 4. Common mappings: electronics→eletronicos/informatica, furniture→moveis, toys→brinquedos
 
+DATE/TIME QUERIES:
+5. For quarters: Use DATE((SELECT MAX(order_purchase_timestamp) FROM orders), '-6 months') for past 2 quarters
+6. For months: Use DATE((SELECT MAX(order_purchase_timestamp) FROM orders), '-N months') for past N months
+7. For years: Use STRFTIME('%Y', date_column) to extract year
+8. For month extraction: STRFTIME('%Y-%m', date_column) for year-month format
+9. For quarter calculation: CAST((CAST(STRFTIME('%m', date_column) AS INTEGER) + 2) / 3 AS INTEGER)
+10. Always use MAX(order_purchase_timestamp) as reference point for relative dates (not CURRENT_DATE)
+11. Date column: order_purchase_timestamp in orders table
+
 Generate ONLY the SQL query without any explanation or markdown formatting.
 Use SQLite syntax. Ensure queries are safe and optimized."""
 

@@ -188,5 +188,56 @@ SQL_EXAMPLES = [
                OR p.product_category_name LIKE '%moveis%'
             GROUP BY category
         """
+    },
+    {
+        "question": "Which product category was the highest selling in the past 2 quarters?",
+        "sql": """
+            SELECT 
+                COALESCE(pct.product_category_name_english, p.product_category_name) as category,
+                COUNT(*) as sales_count,
+                SUM(oi.price) as total_revenue,
+                CAST(STRFTIME('%Y', o.order_purchase_timestamp) AS INTEGER) as year,
+                CAST((CAST(STRFTIME('%m', o.order_purchase_timestamp) AS INTEGER) + 2) / 3 AS INTEGER) as quarter
+            FROM order_items oi
+            JOIN orders o ON oi.order_id = o.order_id
+            JOIN products p ON oi.product_id = p.product_id
+            LEFT JOIN product_category_name_translation pct ON p.product_category_name = pct.product_category_name
+            WHERE o.order_purchase_timestamp >= DATE((SELECT MAX(order_purchase_timestamp) FROM orders), '-6 months')
+            GROUP BY category
+            ORDER BY total_revenue DESC
+            LIMIT 1
+        """
+    },
+    {
+        "question": "Show sales by month for the last 6 months",
+        "sql": """
+            SELECT 
+                STRFTIME('%Y-%m', o.order_purchase_timestamp) as month,
+                COUNT(*) as order_count,
+                SUM(oi.price) as revenue
+            FROM orders o
+            JOIN order_items oi ON o.order_id = oi.order_id
+            WHERE o.order_purchase_timestamp >= DATE((SELECT MAX(order_purchase_timestamp) FROM orders), '-6 months')
+            GROUP BY month
+            ORDER BY month DESC
+        """
+    },
+    {
+        "question": "What were the top selling products last year?",
+        "sql": """
+            SELECT 
+                p.product_id,
+                COALESCE(pct.product_category_name_english, p.product_category_name) as category,
+                COUNT(*) as sales_count,
+                SUM(oi.price) as revenue
+            FROM order_items oi
+            JOIN orders o ON oi.order_id = o.order_id
+            JOIN products p ON oi.product_id = p.product_id
+            LEFT JOIN product_category_name_translation pct ON p.product_category_name = pct.product_category_name
+            WHERE STRFTIME('%Y', o.order_purchase_timestamp) = CAST(STRFTIME('%Y', (SELECT MAX(order_purchase_timestamp) FROM orders)) AS INTEGER) - 1
+            GROUP BY p.product_id, category
+            ORDER BY sales_count DESC
+            LIMIT 10
+        """
     }
 ]

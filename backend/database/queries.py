@@ -25,6 +25,12 @@ IMPORTANT NOTES:
    - furniture → moveis_decoracao
    - toys → brinquedos
    - books → livros_tecnicos, livros_interesse_geral
+5. DATE/TIME queries:
+   - Primary date column: order_purchase_timestamp in orders table
+   - For relative dates (past N months/quarters), use: DATE((SELECT MAX(order_purchase_timestamp) FROM orders), '-N months')
+   - For quarters: Calculate as CAST((CAST(STRFTIME('%m', date) AS INTEGER) + 2) / 3 AS INTEGER)
+   - For year/month: Use STRFTIME('%Y-%m', date)
+   - The dataset spans from 2016 to 2018
 
 """
     

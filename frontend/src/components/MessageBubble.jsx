@@ -8,6 +8,49 @@ const MessageBubble = ({ message }) => {
   const metadata = message.metadata || {}
   const [showSqlQuery, setShowSqlQuery] = useState(false)
 
+  // Format SQL query with proper indentation
+  const formatSqlQuery = (sql) => {
+    if (!sql) return ''
+    
+    // Keywords that should start on a new line
+    const keywords = ['SELECT', 'FROM', 'WHERE', 'AND', 'OR', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN', 
+                      'INNER JOIN', 'OUTER JOIN', 'ON', 'GROUP BY', 'HAVING', 'ORDER BY', 
+                      'LIMIT', 'OFFSET', 'UNION', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END']
+    
+    let formatted = sql.trim()
+    
+    // Add line breaks before major keywords
+    keywords.forEach(keyword => {
+      const regex = new RegExp(`\\s+(${keyword})\\s+`, 'gi')
+      formatted = formatted.replace(regex, `\n${keyword} `)
+    })
+    
+    // Add indentation
+    const lines = formatted.split('\n')
+    let indentLevel = 0
+    const indentedLines = lines.map((line, index) => {
+      const trimmedLine = line.trim()
+      
+      // Decrease indent for certain keywords
+      if (trimmedLine.match(/^(FROM|WHERE|GROUP BY|HAVING|ORDER BY|LIMIT)/i)) {
+        indentLevel = 0
+      } else if (trimmedLine.match(/^(AND|OR)/i)) {
+        indentLevel = 1
+      } else if (trimmedLine.match(/^(JOIN|LEFT JOIN|RIGHT JOIN|INNER JOIN)/i)) {
+        indentLevel = 0
+      } else if (trimmedLine.match(/^ON/i)) {
+        indentLevel = 1
+      } else if (index === 0) {
+        indentLevel = 0
+      }
+      
+      const indent = '  '.repeat(indentLevel)
+      return indent + trimmedLine
+    })
+    
+    return indentedLines.join('\n')
+  }
+
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-slide-up`}>
       <div className={`flex space-x-3 max-w-4xl ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
@@ -66,7 +109,7 @@ const MessageBubble = ({ message }) => {
                   {/* Collapsible Content */}
                   {showSqlQuery && (
                     <div className="px-5 pb-4 border-t border-neutral-700/50 pt-3 animate-slide-up">
-                      <pre className="text-xs leading-relaxed text-neutral-300 overflow-x-auto">{metadata.sql_query}</pre>
+                      <pre className="text-xs leading-relaxed text-neutral-300 overflow-x-auto whitespace-pre font-mono">{formatSqlQuery(metadata.sql_query)}</pre>
                     </div>
                   )}
                 </div>

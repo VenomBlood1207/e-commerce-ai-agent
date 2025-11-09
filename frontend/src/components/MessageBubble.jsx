@@ -1,10 +1,12 @@
-import { User, Bot, Database, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
+import { User, Bot, Database, TrendingUp, ChevronDown, ChevronRight } from 'lucide-react'
 import ChartDisplay from './ChartDisplay'
 import DataTable from './DataTable'
 
 const MessageBubble = ({ message }) => {
   const isUser = message.role === 'user'
   const metadata = message.metadata || {}
+  const [showSqlQuery, setShowSqlQuery] = useState(false)
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} animate-slide-up`}>
@@ -35,16 +37,38 @@ const MessageBubble = ({ message }) => {
           {/* Metadata for assistant messages */}
           {!isUser && metadata.query_type === 'data_query' && (
             <div className="mt-3 space-y-3">
-              {/* SQL Query */}
+              {/* SQL Query - Collapsible */}
               {metadata.sql_query && (
-                <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 text-neutral-100 px-5 py-4 rounded-2xl text-sm font-mono overflow-x-auto shadow-soft border border-neutral-700">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <div className="w-6 h-6 bg-primary-500/20 rounded-lg flex items-center justify-center">
-                      <Database className="w-4 h-4 text-primary-400" />
+                <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 text-neutral-100 rounded-2xl shadow-soft border border-neutral-700 overflow-hidden">
+                  {/* Dropdown Header */}
+                  <button
+                    onClick={() => setShowSqlQuery(!showSqlQuery)}
+                    className="w-full px-5 py-4 flex items-center justify-between hover:bg-neutral-800/50 transition-colors"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <div className="w-6 h-6 bg-primary-500/20 rounded-lg flex items-center justify-center">
+                        <Database className="w-4 h-4 text-primary-400" />
+                      </div>
+                      <span className="text-xs uppercase text-neutral-400 font-semibold tracking-wider">SQL Query</span>
                     </div>
-                    <span className="text-xs uppercase text-neutral-400 font-semibold tracking-wider">SQL Query</span>
-                  </div>
-                  <pre className="text-xs leading-relaxed text-neutral-300">{metadata.sql_query}</pre>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-neutral-500">
+                        {showSqlQuery ? 'Hide' : 'Show'}
+                      </span>
+                      {showSqlQuery ? (
+                        <ChevronDown className="w-4 h-4 text-neutral-400" />
+                      ) : (
+                        <ChevronRight className="w-4 h-4 text-neutral-400" />
+                      )}
+                    </div>
+                  </button>
+                  
+                  {/* Collapsible Content */}
+                  {showSqlQuery && (
+                    <div className="px-5 pb-4 border-t border-neutral-700/50 pt-3 animate-slide-up">
+                      <pre className="text-xs leading-relaxed text-neutral-300 overflow-x-auto">{metadata.sql_query}</pre>
+                    </div>
+                  )}
                 </div>
               )}
 

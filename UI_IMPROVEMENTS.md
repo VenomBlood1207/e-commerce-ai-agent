@@ -173,5 +173,112 @@ in Brazil's major metropolitan areas.
 
 ---
 
+## Database Tables Panel
+
+### Feature
+Added a new "Database Tables" option in the sidebar that displays all available database tables with their column names and row counts.
+
+### Implementation Details
+
+**New Component:** `TablesPanel.jsx`
+
+**Changes:**
+1. Created new modal panel component
+2. Added "Database Tables" button to sidebar
+3. Fetches table information from `/api/stats` endpoint
+4. Displays table schemas with column names
+5. Shows row count for each table
+
+### User Experience
+
+**Sidebar Navigation:**
+- Chat
+- Statistics
+- **Database Tables** ← NEW
+- Clear History
+
+**Tables Panel Features:**
+- Modal overlay with beautiful gradient header
+- List of all 9 database tables
+- Each table card shows:
+  - Table name
+  - Row count (formatted with commas)
+  - Number of columns
+  - All column names in a grid layout
+- Hover effects on table cards
+- Loading state with animated dots
+- Error handling with retry button
+
+### Visual Design
+
+**Header:**
+- Gradient background (primary to accent)
+- Database icon
+- Title and subtitle
+- Close button
+
+**Table Cards:**
+- Gradient background (white to neutral)
+- Table icon with gradient background
+- Table name in bold
+- Row count and column count badges
+- Column names in monospace font
+- Grid layout (2-4 columns responsive)
+- Hover effects (border color change)
+
+### Table Schemas Included
+
+1. **orders** - 8 columns, 99K+ rows
+2. **customers** - 5 columns, 99K+ rows
+3. **order_items** - 7 columns, 112K+ rows
+4. **order_payments** - 5 columns, 103K+ rows
+5. **order_reviews** - 7 columns, 99K+ rows
+6. **products** - 9 columns, 32K+ rows
+7. **sellers** - 4 columns, 3K+ rows
+8. **product_category_name_translation** - 2 columns, 71 rows
+9. **geolocation** - 5 columns, 1M+ rows
+
+### Code Structure
+
+```jsx
+const TablesPanel = ({ isOpen, onClose }) => {
+  const [tables, setTables] = useState(null)
+  const [loading, setLoading] = useState(true)
+  
+  const tableSchemas = {
+    orders: ['order_id', 'customer_id', ...],
+    customers: ['customer_id', 'customer_unique_id', ...],
+    // ... all tables
+  }
+  
+  // Fetch from /api/stats
+  // Display in modal
+}
+```
+
+### Benefits
+
+1. **Quick Reference**: Users can see all available tables at a glance
+2. **Schema Discovery**: Know what columns exist without querying
+3. **Data Size**: Understand table sizes (row counts)
+4. **Query Helper**: Helps users write better queries
+5. **Educational**: Learn database structure
+6. **Professional**: Clean, organized presentation
+
+### Use Cases
+
+- **Before querying**: Check what columns are available
+- **Learning**: Understand the database structure
+- **Reference**: Quick lookup of table/column names
+- **Planning**: Know which tables to join
+- **Documentation**: Visual schema reference
+
+### Files Modified
+
+1. **`frontend/src/components/TablesPanel.jsx`** - New component
+2. **`frontend/src/components/Sidebar.jsx`** - Added button and integration
+
+---
+
 **Date:** November 9, 2024
 **Status:** ✅ Implemented

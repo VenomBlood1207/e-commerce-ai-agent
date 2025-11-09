@@ -1,13 +1,15 @@
 import { useState } from 'react'
 import { 
   Menu, X, MessageSquare, Trash2, Settings, 
-  BarChart3, Database, Info 
+  BarChart3, Database, Info, Table 
 } from 'lucide-react'
 import axios from 'axios'
 import StatisticsPanel from './StatisticsPanel'
+import TablesPanel from './TablesPanel'
 
 const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
   const [showStatsPanel, setShowStatsPanel] = useState(false)
+  const [showTablesPanel, setShowTablesPanel] = useState(false)
 
 
   const clearConversation = async () => {
@@ -78,6 +80,16 @@ const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
             </button>
 
             <button
+              onClick={() => setShowTablesPanel(true)}
+              className="w-full flex items-center space-x-3 px-5 py-4 rounded-2xl hover:bg-neutral-100 transition-all duration-200 group"
+            >
+              <div className="w-9 h-9 bg-neutral-100 rounded-xl flex items-center justify-center group-hover:bg-white group-hover:shadow-soft transition-all">
+                <Table className="w-5 h-5 text-neutral-600" />
+              </div>
+              <span className="text-sm font-semibold text-neutral-700">Database Tables</span>
+            </button>
+
+            <button
               onClick={clearConversation}
               className="w-full flex items-center space-x-3 px-5 py-4 rounded-2xl hover:bg-red-50 transition-all duration-200 group"
             >
@@ -105,6 +117,12 @@ const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
       <StatisticsPanel 
         isOpen={showStatsPanel} 
         onClose={() => setShowStatsPanel(false)} 
+      />
+
+      {/* Tables Panel */}
+      <TablesPanel 
+        isOpen={showTablesPanel} 
+        onClose={() => setShowTablesPanel(false)} 
       />
 
       {/* Overlay */}

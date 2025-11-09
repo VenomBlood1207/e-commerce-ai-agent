@@ -114,19 +114,26 @@ Sample Data: {sample_data}
 
 User Context: {context}
 
-Provide a response that:
-1. Directly answers the question in natural language
-2. Highlights 2-3 key insights from the data
-3. Mentions interesting patterns or trends
-4. Suggests related questions they might want to ask
-5. Is conversational and friendly
+Guidelines:
+- Start with "Based on your question..." or "According to the data..." or "Looking at your request..." 
+- DO NOT say "I found X results for your query"
+- Be conversational, friendly, and helpful
+- Directly answer the question in natural language
+- Highlight 2-3 key insights from the data
+- Mention interesting patterns or trends
+- Keep it concise but informative (3-4 sentences)
 
-Keep it concise but informative (3-4 sentences)."""
+Example good responses:
+- "Based on your question about top places, São Paulo dominates with 15,540 orders, significantly ahead of Rio de Janeiro's 6,882 orders."
+- "According to the sales analysis, the top 5 product categories show strong performance, with furniture and electronics leading the revenue charts."
+- "Looking at your request for delivery patterns, the data reveals that most orders concentrate in Brazil's Southeast region."
+
+Generate a similar natural, insightful response:"""
     
     try:
         nl_response = groq_client.generate_response(prompt, temperature=0.4, max_tokens=300)
     except Exception as e:
-        nl_response = f"I found {row_count} results for your query. The data shows {', '.join(columns[:3])} information."
+        nl_response = f"Based on your question, the data shows {row_count} relevant results with {', '.join(columns[:3])} information."
     
     return {
         "response": nl_response,

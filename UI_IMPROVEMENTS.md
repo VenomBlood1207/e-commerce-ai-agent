@@ -84,5 +84,94 @@ Potential improvements:
 
 ---
 
+## User-Friendly Response Generation
+
+### Feature
+Responses are now more conversational and natural, avoiding robotic phrases like "I found X results for your query."
+
+### Implementation Details
+
+**Files Modified:**
+- `backend/graph/workflow.py`
+- `backend/graph/enhanced_workflow.py`
+
+**Changes:**
+1. Updated response generation prompts
+2. Added explicit guidelines to avoid technical phrases
+3. Provided example responses for the LLM to follow
+4. Increased temperature to 0.4 for more natural language
+
+### Response Patterns
+
+**Before:**
+```
+"I found 10 results for your query."
+"I found 5 results for your query."
+```
+
+**After:**
+```
+"Based on your question about top places, São Paulo dominates with 15,540 orders, significantly ahead of Rio de Janeiro's 6,882 orders."
+
+"According to the sales analysis, the top 5 product categories show strong performance, with furniture and electronics leading the revenue charts."
+
+"Looking at your request for delivery patterns, the data reveals that most orders concentrate in Brazil's Southeast region."
+```
+
+### Response Guidelines
+
+The AI now follows these principles:
+1. **Start naturally**: "Based on your question...", "According to the data...", "Looking at your request..."
+2. **Be conversational**: Friendly, helpful tone
+3. **Provide insights**: Highlight 2-3 key findings
+4. **Answer directly**: Address the user's question immediately
+5. **Stay concise**: 2-4 sentences maximum
+
+### Prompt Structure
+
+```python
+prompt = f"""Generate a friendly, conversational response...
+
+Guidelines:
+- Start with "Based on your question..." or similar
+- DO NOT say "I found X results for your query"
+- Be conversational and helpful
+- Highlight 1-2 key insights
+- Keep it concise (2-3 sentences)
+
+Example good responses:
+- "Based on your question about top cities, São Paulo leads..."
+- "According to the sales data, the top 5 categories..."
+
+Generate a similar natural, helpful response:"""
+```
+
+### Benefits
+
+1. **More Human**: Responses feel natural and conversational
+2. **More Informative**: Includes actual insights, not just counts
+3. **Better UX**: Users get immediate value from responses
+4. **Professional**: Matches modern AI assistant standards
+5. **Context-Aware**: Responses reference the user's actual question
+
+### Examples
+
+**Query:** "List the top 10 places with the most orders"
+
+**Old Response:**
+```
+I found 10 results for your query.
+```
+
+**New Response:**
+```
+Based on your question about top places, São Paulo dominates with 15,540 orders, 
+significantly ahead of Rio de Janeiro's 6,882 orders. Belo Horizonte comes in 
+third with 2,773 orders, showing a clear concentration of e-commerce activity 
+in Brazil's major metropolitan areas.
+```
+
+---
+
 **Date:** November 9, 2024
 **Status:** ✅ Implemented

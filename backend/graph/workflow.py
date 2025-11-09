@@ -60,19 +60,30 @@ def generate_data_response(state: AgentState) -> Dict[str, Any]:
     # Generate natural language response
     row_count = result_df_dict.get("row_count", 0)
     
-    prompt = f"""Generate a brief, natural language summary of the query results.
+    prompt = f"""Generate a friendly, conversational response to the user's question based on the query results.
 
-User Query: {state['user_query']}
-SQL Query: {sql_query}
+User's Question: {state['user_query']}
 Number of Results: {row_count}
 Sample Data: {str(result_df_dict['data'][:3])}
 
-Provide a 2-3 sentence summary highlighting key insights."""
+Guidelines:
+- Start with "Based on your question..." or "According to the data..." or similar natural phrases
+- DO NOT say "I found X results for your query"
+- Be conversational and helpful
+- Highlight 1-2 key insights from the data
+- Keep it concise (2-3 sentences)
+
+Example good responses:
+- "Based on your question about top cities, São Paulo leads with 15,540 orders, followed by Rio de Janeiro with 6,882 orders."
+- "According to the sales data, the top 5 categories generated over $1.2M in revenue, with furniture being the highest performer."
+- "Looking at the delivery patterns, most orders are concentrated in the Southeast region, particularly in São Paulo and Rio de Janeiro."
+
+Generate a similar natural, helpful response:"""
 
     try:
-        nl_response = groq_client.generate_response(prompt, temperature=0.3)
+        nl_response = groq_client.generate_response(prompt, temperature=0.4)
     except:
-        nl_response = f"I found {row_count} results for your query."
+        nl_response = f"Based on your question, I found {row_count} relevant results in the database."
     
     return {
         "response": nl_response,

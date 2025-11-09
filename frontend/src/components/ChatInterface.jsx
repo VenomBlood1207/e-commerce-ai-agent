@@ -99,25 +99,51 @@ const ChatInterface = ({ sessionId }) => {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <h1 className="text-2xl font-bold text-gray-800">E-commerce Intelligence Agent</h1>
-        <p className="text-sm text-gray-600">Ask me anything about the e-commerce data</p>
+      <div className="bg-white/80 backdrop-blur-md border-b border-neutral-200/50 px-8 py-6 shadow-soft">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center shadow-glow">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent">E-commerce Intelligence Agent</h1>
+              <p className="text-sm text-neutral-600">Powered by AI • Ask me anything about your data</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
+        <div className="max-w-5xl mx-auto">
         {messages.length === 0 && (
-          <div className="text-center py-12">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Welcome! 👋</h2>
-            <p className="text-gray-600 mb-6">Try asking:</p>
-            <div className="grid gap-2 max-w-2xl mx-auto">
+          <div className="text-center py-16 animate-fade-in">
+            <div className="mb-8">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-100 to-accent-100 rounded-3xl mb-4 shadow-soft">
+                <span className="text-5xl">👋</span>
+              </div>
+              <h2 className="text-3xl font-bold text-neutral-800 mb-2">Welcome!</h2>
+              <p className="text-neutral-600 text-lg">I'm your AI-powered e-commerce analytics assistant</p>
+            </div>
+            <p className="text-neutral-700 font-medium mb-6">Try asking:</p>
+            <div className="grid gap-3 max-w-2xl mx-auto">
               {exampleQueries.map((query, idx) => (
                 <button
                   key={idx}
                   onClick={() => setInput(query)}
-                  className="text-left px-4 py-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors"
+                  className="group text-left px-6 py-4 bg-white/80 backdrop-blur-sm border border-neutral-200 rounded-2xl hover:border-primary-400 hover:shadow-soft hover:scale-[1.02] transition-all duration-200 animate-slide-up"
+                  style={{ animationDelay: `${idx * 100}ms` }}
                 >
-                  <span className="text-sm text-gray-700">{query}</span>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm text-neutral-700 group-hover:text-primary-700 transition-colors">{query}</span>
+                  </div>
                 </button>
               ))}
             </div>
@@ -129,35 +155,49 @@ const ChatInterface = ({ sessionId }) => {
         ))}
 
         {isLoading && (
-          <div className="flex items-center space-x-2 text-gray-500">
-            <Loader2 className="w-5 h-5 animate-spin" />
-            <span>Thinking...</span>
+          <div className="flex items-center space-x-3 text-neutral-600 animate-slide-up">
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+            <span className="text-sm font-medium">AI is thinking...</span>
           </div>
         )}
 
         <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input */}
-      <div className="bg-white border-t border-gray-200 px-6 py-4">
-        <form onSubmit={handleSubmit} className="flex space-x-4">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a question..."
-            disabled={isLoading}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100"
-          />
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center space-x-2"
-          >
-            <Send className="w-5 h-5" />
-            <span>Send</span>
-          </button>
-        </form>
+      <div className="bg-white/80 backdrop-blur-md border-t border-neutral-200/50 px-8 py-6 shadow-soft">
+        <div className="max-w-5xl mx-auto">
+          <form onSubmit={handleSubmit} className="flex space-x-4">
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Ask me anything about your e-commerce data..."
+                disabled={isLoading}
+                className="w-full px-6 py-4 pr-12 bg-white border-2 border-neutral-200 rounded-2xl focus:outline-none focus:border-primary-400 focus:ring-4 focus:ring-primary-100 disabled:bg-neutral-100 disabled:text-neutral-400 transition-all duration-200 text-neutral-800 placeholder-neutral-400 shadow-inner-soft"
+              />
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-neutral-400">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white rounded-2xl disabled:from-neutral-300 disabled:to-neutral-300 disabled:cursor-not-allowed transition-all duration-200 flex items-center space-x-2 shadow-soft hover:shadow-glow font-medium"
+            >
+              <Send className="w-5 h-5" />
+              <span>Send</span>
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   )

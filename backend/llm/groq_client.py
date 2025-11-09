@@ -79,6 +79,16 @@ Database Schema:
 
 {examples}
 
+CRITICAL RULES:
+1. Product categories are in PORTUGUESE in the database
+2. When user mentions category names in ENGLISH (e.g., electronics, furniture, toys):
+   - ALWAYS JOIN with product_category_name_translation table
+   - Use: LEFT JOIN product_category_name_translation pct ON p.product_category_name = pct.product_category_name
+   - Filter using: WHERE pct.product_category_name_english LIKE '%keyword%'
+   - Also check Portuguese names as fallback
+3. Use LIKE with wildcards for flexible category matching
+4. Common mappings: electronics→eletronicos/informatica, furniture→moveis, toys→brinquedos
+
 Generate ONLY the SQL query without any explanation or markdown formatting.
 Use SQLite syntax. Ensure queries are safe and optimized."""
 

@@ -11,7 +11,22 @@ def get_schema_description() -> str:
     Returns:
         Formatted schema string
     """
-    schema_text = "Database Schema:\n\n"
+    schema_text = """Database Schema:
+
+IMPORTANT NOTES:
+1. Product categories are stored in PORTUGUESE in the 'products' table
+2. ALWAYS use the 'product_category_name_translation' table to handle English category names
+3. When filtering by category in English (e.g., 'electronics', 'furniture'), use:
+   - JOIN with product_category_name_translation table
+   - Use LIKE '%keyword%' for flexible matching
+   - Check both English translation AND Portuguese names
+4. Common category mappings:
+   - electronics → eletronicos, informatica_acessorios
+   - furniture → moveis_decoracao
+   - toys → brinquedos
+   - books → livros_tecnicos, livros_interesse_geral
+
+"""
     
     for table_name, table_info in DATABASE_SCHEMA.items():
         schema_text += f"Table: {table_name}\n"

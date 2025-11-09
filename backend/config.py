@@ -137,10 +137,14 @@ SQL_EXAMPLES = [
     {
         "question": "What are the top 5 product categories by sales?",
         "sql": """
-            SELECT p.product_category_name, COUNT(*) as sales_count, SUM(oi.price) as total_revenue
+            SELECT 
+                COALESCE(pct.product_category_name_english, p.product_category_name) as category,
+                COUNT(*) as sales_count, 
+                SUM(oi.price) as total_revenue
             FROM order_items oi
             JOIN products p ON oi.product_id = p.product_id
-            GROUP BY p.product_category_name
+            LEFT JOIN product_category_name_translation pct ON p.product_category_name = pct.product_category_name
+            GROUP BY category
             ORDER BY total_revenue DESC
             LIMIT 5
         """
@@ -155,6 +159,34 @@ SQL_EXAMPLES = [
             WHERE o.order_delivered_customer_date IS NOT NULL
             GROUP BY c.customer_state
             ORDER BY avg_delivery_days
+        """
+    },
+    {
+        "question": "What is the average order value for items in the electronics category?",
+        "sql": """
+            SELECT AVG(oi.price) as average_order_value
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.product_id
+            LEFT JOIN product_category_name_translation pct ON p.product_category_name = pct.product_category_name
+            WHERE pct.product_category_name_english LIKE '%electronics%' 
+               OR pct.product_category_name_english LIKE '%eletronicos%'
+               OR p.product_category_name LIKE '%eletronicos%'
+               OR p.product_category_name LIKE '%informatica%'
+        """
+    },
+    {
+        "question": "Show me sales for furniture products",
+        "sql": """
+            SELECT 
+                COALESCE(pct.product_category_name_english, p.product_category_name) as category,
+                COUNT(*) as order_count,
+                SUM(oi.price) as total_revenue
+            FROM order_items oi
+            JOIN products p ON oi.product_id = p.product_id
+            LEFT JOIN product_category_name_translation pct ON p.product_category_name = pct.product_category_name
+            WHERE pct.product_category_name_english LIKE '%furniture%'
+               OR p.product_category_name LIKE '%moveis%'
+            GROUP BY category
         """
     }
 ]

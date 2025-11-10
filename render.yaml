@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: ecommerce-ai-backend
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite:///./database/ecommerce.db
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
+      - key: LOG_LEVEL
+        value: INFO
+      - key: LANGCHAIN_TRACING_V2
+        value: false
+      - key: CORS_ORIGINS
+        sync: false

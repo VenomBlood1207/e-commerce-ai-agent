@@ -7,6 +7,8 @@ import axios from 'axios'
 import StatisticsPanel from './StatisticsPanel'
 import TablesPanel from './TablesPanel'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+
 const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
   const [showStatsPanel, setShowStatsPanel] = useState(false)
   const [showTablesPanel, setShowTablesPanel] = useState(false)
@@ -15,7 +17,7 @@ const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
   const clearConversation = async () => {
     if (window.confirm('Clear conversation history?')) {
       try {
-        await axios.delete(`/api/conversation/${sessionId}`)
+        await axios.delete(`${API_BASE_URL}/conversation/${sessionId}`)
         window.location.reload()
       } catch (error) {
         console.error('Error clearing conversation:', error)

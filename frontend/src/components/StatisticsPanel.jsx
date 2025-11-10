@@ -20,7 +20,7 @@ const StatisticsPanel = ({ isOpen, onClose }) => {
     
     try {
       // Load basic stats
-      const statsResponse = await axios.get('/api/stats')
+      const statsResponse = await axios.get(`${API_BASE_URL}/stats`)
       setStats(statsResponse.data)
     } catch (err) {
       setError(err.message)

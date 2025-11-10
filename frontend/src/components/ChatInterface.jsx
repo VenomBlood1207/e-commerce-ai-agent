@@ -3,6 +3,8 @@ import { Send, Loader2 } from 'lucide-react'
 import MessageBubble from './MessageBubble'
 import axios from 'axios'
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+
 const ChatInterface = ({ sessionId }) => {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -24,7 +26,7 @@ const ChatInterface = ({ sessionId }) => {
 
   const loadHistory = async () => {
     try {
-      const response = await axios.get(`/api/conversation/${sessionId}`)
+      const response = await axios.get(`${API_BASE_URL}/conversation/${sessionId}`)
       const history = response.data.messages || []
       
       const formattedMessages = history.map(msg => ({

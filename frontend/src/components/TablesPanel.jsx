@@ -17,7 +17,7 @@ const TablesPanel = ({ isOpen, onClose }) => {
     setLoading(true)
     setError(null)
     try {
-      const response = await axios.get('/api/stats')
+      const response = await axios.get(`${API_BASE_URL}/stats`)
       setTables(response.data.tables)
     } catch (err) {
       setError(err.message)

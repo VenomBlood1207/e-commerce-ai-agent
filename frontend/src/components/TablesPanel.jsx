@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Database, Table, Columns, Hash } from 'lucide-react'
 import axios from 'axios'
+import API_BASE_URL from '../config'
 
 const TablesPanel = ({ isOpen, onClose }) => {
   const [tables, setTables] = useState(null)

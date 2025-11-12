@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { X, Database, TrendingUp, Users, Package, Star, MapPin, DollarSign, Clock } from 'lucide-react'
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import axios from 'axios'
+import API_BASE_URL from '../config'
 
 const StatisticsPanel = ({ isOpen, onClose }) => {
   const [stats, setStats] = useState(null)

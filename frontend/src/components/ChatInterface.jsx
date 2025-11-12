@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Send, Loader2 } from 'lucide-react'
 import MessageBubble from './MessageBubble'
 import axios from 'axios'
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || ''
+import API_BASE_URL from '../config'
 
 const ChatInterface = ({ sessionId }) => {
   const [messages, setMessages] = useState([])

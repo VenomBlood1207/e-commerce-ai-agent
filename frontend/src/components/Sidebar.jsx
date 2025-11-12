@@ -4,10 +4,9 @@ import {
   BarChart3, Database, Info, Table 
 } from 'lucide-react'
 import axios from 'axios'
+import API_BASE_URL from '../config'
 import StatisticsPanel from './StatisticsPanel'
 import TablesPanel from './TablesPanel'
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || ''
 
 const Sidebar = ({ isOpen, onToggle, sessionId, onSessionChange }) => {
   const [showStatsPanel, setShowStatsPanel] = useState(false)
